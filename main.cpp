@@ -83,15 +83,14 @@ std::vector<aligned_quad<double>> ran_test_vector(std::size_t length_,
   return v;
 }
 
-
-[[nodiscard]] HEDLEY_ALWAYS_INLINE bool equal_m64 (double const& a_, double const& b_) noexcept {
-    __int64 a;
-    memcpy (&a, &a_, sizeof (__int64));
-    __int64 b;
-    memcpy (&b, &b_, sizeof (__int64));
-    return a == b;
+[[nodiscard]] HEDLEY_ALWAYS_INLINE bool equal_m64(double const& a_,
+                                                  double const& b_) noexcept {
+  __int64 a;
+  memcpy(&a, &a_, sizeof(__int64));
+  __int64 b;
+  memcpy(&b, &b_, sizeof(__int64));
+  return a == b;
 }
-
 
 [[nodiscard]] HEDLEY_ALWAYS_INLINE bool equal_m128(double const& a_,
                                                    double const& b_) noexcept {
@@ -132,8 +131,8 @@ int main() {
 
     for (std::size_t i = 0; i < N; i += result) {
       bool r = rap[i] == rbp[i];
-      if (not r)
-        std::cout << i << ' ';
+  //    if (not r)
+   //     std::cout << i << ' ';
       result = result and r;
     }
 
@@ -149,8 +148,8 @@ int main() {
 
     for (std::size_t i = 0; i < N; i += 2) {
       bool r = equal_m128(fap[i], fbp[i]);
-      if (not r)
-        std::cout << i << ' ';
+  //    if (not r)
+   //     std::cout << i << ' ';
       result = result and r;
     }
 
@@ -166,8 +165,8 @@ int main() {
 
     for (std::size_t i = 0; i < N; i += 4) {
       bool r = equal_m256(fap[i], fbp[i]);
-      if (not r)
-        std::cout << i << ' ';
+    //  if (not r)
+    //    std::cout << i << ' ';
       result = result and r;
     }
 
@@ -183,13 +182,30 @@ int main() {
 
     for (std::size_t i = 0; i < N; i += 1) {
       bool r = equal_m64(fap[i], fbp[i]);
-      if (not r)
-        std::cout << i << ' ';
+ //     if (not r)
+  //      std::cout << i << ' ';
       result = result and r;
     }
 
     duration = static_cast<std::uint64_t>(timer.get_elapsed_us()) / 100 * 100;
     std::cout << std::dec << duration << " ms " << result << '\n';
+  }
+  {
+      bool result = true;
+
+      std::uint64_t duration;
+      plf::nanotimer timer;
+      timer.start ();
+
+      for (std::size_t i = 0; i < N; i += result) {
+          bool r = rap[i] == rbp[i];
+          //    if (not r)
+           //     std::cout << i << ' ';
+          result = result and r;
+      }
+
+      duration = static_cast<std::uint64_t>(timer.get_elapsed_us ()) / 100 * 100;
+      std::cout << std::dec << duration << " ms " << result << '\n';
   }
   return EXIT_SUCCESS;
 }
